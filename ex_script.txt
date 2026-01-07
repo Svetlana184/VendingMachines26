@@ -1,0 +1,67 @@
+create table Users(
+	IdUser int identity(1,1) not null primary key,
+	FirstNameUser nvarchar(50) not null,
+	SecondNameUser nvarchar(70),
+	SurnameUser nvarchar(70) not null,
+	Email nvarchar(200) not null,
+	Role nvarchar(200) not null
+);
+
+
+
+create table VendingMachines(
+
+	IdMachine int identity(1,1) not null primary key,
+	IdUser int not null,
+
+	SerialNumber nvarchar(50) not null unique,
+	TotalRevenue DECIMAL(15,2) DEFAULT 0.00 CHECK (TotalRevenue >= 0),
+
+	MachineType NVARCHAR(50) NOT NULL CHECK 
+	(MachineType IN ('С оплатой картой', 'С оплатой наличными', 'Два вида оплаты')),
+
+	ManufacturingDate DATE NOT NULL,
+    CommissioningDate DATE NOT NULL,
+	LastVerificationDate DATE,
+	VerificationIntervalMonths 
+	 INT CHECK (VerificationIntervalMonths IS NULL OR VerificationIntervalMonths > 0),
+
+	 CONSTRAINT CHK_CommissioningDate CHECK (
+        CommissioningDate >= ManufacturingDate
+    ),
+    
+    
+);
+
+
+
+ALTER TABLE VendingMachines
+ADD FOREIGN KEY (IdUser) REFERENCES Users(IdUser);
+
+
+
+ALTER TABLE VendingMachines
+ADD NextVerificationDate AS 
+    CASE 
+        WHEN LastVerificationDate IS NOT NULL AND VerificationIntervalMonths IS NOT NULL 
+        THEN DATEADD(MONTH, VerificationIntervalMonths, LastVerificationDate)
+        ELSE NULL
+    END PERSISTED;
+
+
+
+INSERT INTO VendingMachines (
+    MachineType,
+    SerialNumber,
+    ManufacturingDate,
+    CommissioningDate,
+    LastVerificationDate,
+    VerificationIntervalMonths
+) VALUES (
+    N'Два вида оплаты',
+    N'SN123456789',
+    '2023-01-15',
+    '2023-02-01',
+    '2023-12-01',
+    12
+);
