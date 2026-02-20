@@ -8,4 +8,4 @@
 2. [Настольное приложение](https://github.com/Svetlana184/VendingMachinesDesktop26)
 3. [Веб-приложение](https://github.com/Svetlana184/VendingMachinesWeb26)
 4. [Тесты](https://github.com/Svetlana184/VendingMachinesTests26)
-5. Мобильное приложение
+5. [Мобильное приложение](https://github.com/Svetlana184/VendingMachinesMobile26.git)
